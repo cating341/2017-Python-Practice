@@ -28,9 +28,16 @@ class Video:
         '''
         frames = []
         # 5-1 /5-2 Read video and collect them
+        
+        while(1):
+            sucessfully_read, frame = self.cap.read()
+            if(sucessfully_read == False):
+                break
+            frame = resize(frame, image_h, image_w)
+            frames.append(frame)
 
-        self.frames = ...  # 5-3 let object have the result
-        return ...  # return your results
+        self.frames = frames  # 5-3 let object have the result
+        return frames  # return your results
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.cap.release()

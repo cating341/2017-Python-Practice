@@ -1,15 +1,16 @@
 import logging
 import sys
 from datetime import datetime
-
 import tensorflow as tf
-
 '''
 1. import `Video` and `save_video` from the correct module of package "styler"
 '''
-from ... import Video
-from ... import save_video
+from styler.video import Video
+from styler.utils import save_video
 
+
+video_name = 'jaguar.mp4'
+video_path = 'input/' + video_name
 
 model_file = 'data/vg-30.pb'
 model_name = 'vg-30'
@@ -18,7 +19,6 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s:%(message)s',
     level=logging.INFO,
     datefmt='%I:%M:%S')
-
 
 def main():
 
@@ -41,7 +41,7 @@ def main():
         '''
         2. set the `path` to  your input
         '''
-        with Video(...) as v:
+        with Video(video_path) as v:
             frames = v.read_frames(image_h=shape[1], image_w=shape[2])
 
         logging.info("Processing image")
@@ -51,17 +51,14 @@ def main():
         3. Write a list comprehension to iterate through all frames,
            and make it be processed by Tensorflow.
         '''
-        processed = [
-            session.run(out, feed_dict={image: [frame]})
-            ...
-        ]
+        processed = [ session.run(out, feed_dict={image: [frame]}) for frame in frames ]
 
         '''
         4. Pass the results as a argument into function
         '''
         save_video('result.mp4',
                    fps=30, h=shape[1], w=shape[2],
-                   frames=...)
+                   frames = processed)
 
         logging.info("Processing took %f" % (
             (datetime.now() - start_time).total_seconds()))
